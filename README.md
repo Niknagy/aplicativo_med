@@ -5,7 +5,7 @@ O sistema auxilia no controle diário de medicamentos — especialmente voltado 
 
 ---
 
-## ✨ Funcionalidades Principais
+## Funcionalidades Principais
 
 * **Modo Paciente sem Barreira de Login:** O paciente abre o aplicativo direto na tela principal (`HomeScreen`), visualiza a saudação dinâmica por período (*"Bom dia / Boa tarde / Boa noite: aqui estão seus remédios"*) e marca ("ticka") as doses tomadas com apenas um toque.
   
@@ -21,7 +21,7 @@ O sistema auxilia no controle diário de medicamentos — especialmente voltado 
 
 ---
 
-## 🛠️ Tecnologias Utilizadas
+## Tecnologias Utilizadas
 
 * **Flutter & Dart** (Material Design 3, localização `pt_BR`, gerenciamento de rotas nomeadas com `onGenerateRoute`)
 * **SQLite (`sqflite` + `path`)** (Persistência local relacional com `FOREIGN KEY` e `UNIQUE` constraints)
@@ -31,7 +31,7 @@ O sistema auxilia no controle diário de medicamentos — especialmente voltado 
 
 ---
 
-## 📂 Estrutura do Projeto
+## Estrutura do Projeto
 
 ```text
 /lib
@@ -52,3 +52,38 @@ O sistema auxilia no controle diário de medicamentos — especialmente voltado 
  └── /widgets
       ├── dose_tile.dart
       └── medicamento_card.dart
+```
+
+---
+
+## Instruções para Executar o Projeto
+
+Clone o repositório:
+
+Bash
+git clone https://github.com/Niknagy/aplicativo_med
+cd medicamentos_app
+Instale as dependências do Flutter:
+
+Bash
+flutter pub get
+Execute a aplicação em um emulador ou dispositivo conectado:
+
+Bash
+flutter run
+
+---
+
+## Descrição da Autenticação e da Base de Dados
+
+Autenticação (AuthService): Utiliza armazenamento local seguro onde a senha do responsável é convertida em hash SHA-256 antes de ser gravada no SQLite. O ID da sessão ativa é mantido no SharedPreferences. Possui validação de campos obrigatórios, validação de formato de e-mail por expressão regular, verificação de duplicidade de e-mail, tamanho mínimo de senha (6 caracteres) e confirmação de senha. A rota /medicamento é protegida no main.dart, redirecionando usuários não autenticados para /login.
+
+Base de Dados (DatabaseService - ja_tomei_v2.db):
+
+usuarios: Armazena id, nome, email, senha_hash e papel (admin).
+
+medicamentos: Armazena id, nome, dose, horarios (lista separada por vírgulas), observacao e a flag notificacao_fixa.
+
+registros_dose: Controla os checks diários de cada horário (medicamento_id, data, horario, tomado e hora_marcada) com exclusão em cascata (ON DELETE CASCADE).
+
+auditoria_logs: Registra o histórico imutável de alterações na receita (admin_nome, admin_email, acao, detalhes e data_hora).
