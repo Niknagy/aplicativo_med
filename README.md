@@ -1,4 +1,4 @@
-# 💊 Meus Remédios
+# Játomei?
 
 Aplicativo Flutter para controle diário do uso de medicamentos. 
 Um responsável (**admin**) cadastra a lista de remédios e horários, e o **usuário** marca, na hora de tomar, se a dose foi tomada. Pensado para ajudar pessoas que esquecem facilmente de tomar seus medicamentos.
