@@ -1,94 +1,54 @@
-# Játomei?
+# Já tomei? — Controle de Medicamentos com Auditoria
 
-Aplicativo Flutter para controle diário do uso de medicamentos. 
-Um responsável (**admin**) cadastra a lista de remédios e horários, e o **usuário** marca, na hora de tomar, se a dose foi tomada. Pensado para ajudar pessoas que esquecem facilmente de tomar seus medicamentos.
+Aplicativo multiplataforma desenvolvido em **Flutter** e **Dart** com persistência relacional em **SQLite** (Projeto Final P2).
+O sistema auxilia no controle diário de medicamentos — especialmente voltado para pessoas com **TDAH** ou **Alzheimer** que frequentemente esquecem o horário da medicação ou têm dúvidas se já tomaram a dose do dia.
 
-Projeto Final (P2) — FATEC, Desenvolvimento de Software Multiplataforma.
+---
 
-## Funcionalidades principais
+## ✨ Funcionalidades Principais
 
-- **Cadastro, login e logout** de usuários, com sessão mantida ao fechar o app.
-- **Dois perfis de acesso:**
-  - **Admin** (primeiro usuário cadastrado): CRUD completo de medicamentos (nome, dose, horários e observação).
-  - **Usuário**: vê as doses do dia e marca cada uma como tomada (checkbox), com barra de progresso diária.
-- **Histórico dos últimos 7 dias** com a quantidade de doses tomadas por dia e o horário em que cada uma foi marcada.
-- **Proteção de telas:** telas internas só abrem com usuário autenticado; o formulário de medicamentos só abre para admin.
-- **Validação de formulários** e tratamento de erros (campos vazios, e-mail inválido, senha curta, e-mail já cadastrado, login inválido).
+* **Modo Paciente sem Barreira de Login:** O paciente abre o aplicativo direto na tela principal (`HomeScreen`), visualiza a saudação dinâmica por período (*"Bom dia / Boa tarde / Boa noite: aqui estão seus remédios"*) e marca ("ticka") as doses tomadas com apenas um toque.
+  
+* **Área Restrita do Responsável / Admin (Autenticação & Proteção de Rotas):** Cadastro, login (com hash criptográfico `SHA-256`) e logout exclusivos para a pessoa de confiança responsável por gerenciar a receita médica no aparelho.
+  
+* **CRUD Completo de Medicamentos (Protegido):** Somente o administrador autenticado pode cadastrar novos medicamentos, definir a dosagem (`mg`), adicionar múltiplos horários (ex.: `08:00`, `12:00`, `16:00`, `22:00`), editar ou excluir registros.
+    
+  * No horário da dose (e a cada 2 minutos de atraso), mantém uma notificação fixa (`ongoing: true`) na barra do celular e um banner de alerta no topo do app que só desaparecem quando o usuário entra no aplicativo e marca o check de que tomou o remédio.
+    
+* **Modo Discreto ("Date Mode"):** Chave configurável pelo Admin em cada medicamento que permite desativar a trava da notificação fixa e ocultar o nome do remédio na tela de bloqueio, evitando constrangimentos em compromissos sociais ou encontros.
+  
+* **Trilha de Auditoria Local (`auditoria_logs`) e Histórico de 7 Dias:** Toda inclusão, edição ou exclusão feita na receita registra automaticamente no banco de dados o nome e e-mail do Admin responsável, a data/hora exata e os valores alterados (antes e depois).
 
-## Tecnologias utilizadas
+---
 
-| Tecnologia | Uso |
-|---|---|
-| Flutter / Dart | Aplicativo multiplataforma |
-| sqflite | Banco de dados SQLite local |
-| crypto | Hash SHA-256 das senhas |
-| shared_preferences | Guardar a sessão do usuário logado |
-| intl | Formatação de datas (pt-BR) |
+## 🛠️ Tecnologias Utilizadas
 
-## Estrutura do projeto
+* **Flutter & Dart** (Material Design 3, localização `pt_BR`, gerenciamento de rotas nomeadas com `onGenerateRoute`)
+* **SQLite (`sqflite` + `path`)** (Persistência local relacional com `FOREIGN KEY` e `UNIQUE` constraints)
+* **Segurança & Sessão (`crypto` + `shared_preferences`)** (Hash `SHA-256` de senhas e manutenção de sessão do Admin)
+* **Notificações Locais (`flutter_local_notifications`)** (Notificações persistentes e motor de verificação periódica)
+* **Internacionalização (`intl`)** (Formatação de datas, horários e histórico semanal)
 
-```
-lib/
-├── main.dart                      # Rotas e proteção de telas
-├── screens/
-│   ├── login_screen.dart
-│   ├── register_screen.dart
-│   ├── home_screen.dart           # Admin (CRUD) ou Usuário (doses do dia)
-│   ├── medicamento_form_screen.dart
-│   └── historico_screen.dart
-├── services/
-│   ├── auth_service.dart          # Cadastro, login, logout, sessão
-│   └── database_service.dart      # SQLite (tabelas e consultas)
-├── models/
-│   ├── usuario.dart
-│   ├── medicamento.dart
-│   └── registro_dose.dart
-└── widgets/
-    ├── medicamento_card.dart
-    └── dose_tile.dart
-```
+---
 
-## Como executar
+## 📂 Estrutura do Projeto
 
-Pré-requisito: [Flutter SDK](https://docs.flutter.dev/get-started/install) instalado.
-
-```bash
-git clone https://github.com/Niknagy/aplicativo_med/blob/main
-cd medicamentos_app
-flutter pub get
-flutter run
-```
-
-> O app usa SQLite (`sqflite`), portanto deve ser executado em **Android, iOS ou desktop** (não em Flutter Web).
-
-### Primeiro acesso
-
-1. Abra o app e toque em **"Não tem conta? Cadastre-se"**.
-2. O **primeiro usuário cadastrado vira administrador** — cadastre os medicamentos com ele.
-3. Saia e cadastre um segundo usuário (perfil **usuário**) para marcar as doses.
-
-## Autenticação
-
-Autenticação local própria, sem serviços externos:
-
-- Cadastro e login por **e-mail e senha** (mínimo 6 caracteres).
-- A senha **nunca é salva em texto puro**: é gravada como hash SHA-256.
-- Após o login, o `id` do usuário é guardado em `shared_preferences` para manter a sessão.
-- O campo `papel` (`admin` ou `usuario`) define o que cada perfil pode fazer.
-- As rotas protegidas são verificadas em `main.dart` (`onGenerateRoute`).
-
-## Base de dados
-
-SQLite local, criado automaticamente na primeira execução (`medicamentos.db`):
-
-| Tabela | Campos principais |
-|---|---|
-| `usuarios` | id, nome, email (único), senha_hash, papel |
-| `medicamentos` | id, nome, dose, horarios (ex.: `08:00,20:00`), observacao |
-| `registros_dose` | id, usuario_id, medicamento_id, data, horario, tomado, hora_marcada |
-
-O **CRUD** de `medicamentos` é feito pelo admin; os `registros_dose` são criados/atualizados pelo usuário ao marcar cada dose. Ao excluir um medicamento, seus registros são removidos em cascata.
-
-## Possíveis melhorias
-
-- Sincronização na nuvem (Firebase/Supabase) para o responsável acompanhar à distância.
+```text
+/lib
+ ├── main.dart
+ ├── /models
+ │    ├── medicamento.dart
+ │    ├── registro_dose.dart
+ │    └── usuario.dart
+ ├── /services
+ │    ├── auth_service.dart
+ │    └── database_service.dart
+ ├── /screens
+ │    ├── home_screen.dart
+ │    ├── login_screen.dart
+ │    ├── register_screen.dart
+ │    ├── medicamento_form_screen.dart
+ │    └── historico_screen.dart
+ └── /widgets
+      ├── dose_tile.dart
+      └── medicamento_card.dart
