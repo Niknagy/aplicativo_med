@@ -53,7 +53,7 @@ lib/
 Pré-requisito: [Flutter SDK](https://docs.flutter.dev/get-started/install) instalado.
 
 ```bash
-git clone <URL-DO-REPOSITORIO>
+git clone https://github.com/Niknagy/aplicativo_med/blob/main
 cd medicamentos_app
 flutter pub get
 flutter run
