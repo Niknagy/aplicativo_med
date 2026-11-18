@@ -76,7 +76,9 @@ flutter run
 
 ## Descrição da Autenticação e da Base de Dados
 
-Autenticação (AuthService): Utiliza armazenamento local seguro onde a senha do responsável é convertida em hash SHA-256 antes de ser gravada no SQLite. O ID da sessão ativa é mantido no SharedPreferences. Possui validação de campos obrigatórios, validação de formato de e-mail por expressão regular, verificação de duplicidade de e-mail, tamanho mínimo de senha (6 caracteres) e confirmação de senha. A rota /medicamento é protegida no main.dart, redirecionando usuários não autenticados para /login.
+Autenticação (AuthService): Utiliza armazenamento local seguro onde a senha do responsável é convertida em hash SHA-256 antes de ser gravada no SQLite. O ID da sessão ativa é mantido no SharedPreferences. Possui validação de campos obrigatórios, validação de formato de e-mail por expressão regular, verificação de duplicidade de e-mail, tamanho mínimo de senha (6 caracteres) e confirmação de senha. 
+
+A rota /medicamento é protegida no main.dart, redirecionando usuários não autenticados para /login.
 
 Base de Dados (DatabaseService - ja_tomei_v2.db):
 
