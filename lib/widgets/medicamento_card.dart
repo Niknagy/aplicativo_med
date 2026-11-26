@@ -26,6 +26,9 @@ class MedicamentoCard extends StatelessWidget {
         subtitle: Text(
           '${medicamento.dose}\nHorários: ${medicamento.horarios.join(', ')}'
           '${medicamento.observacao.isNotEmpty ? '\n${medicamento.observacao}' : ''}'
+          '${medicamento.medico.isNotEmpty ? '\nTel. Médico: ${medicamento.medico}' : ''}'
+          '${medicamento.medico.isNotEmpty ? '\nMédico: ${medicamento.medico}' : ''}'
+          '${medicamento.telefoneMedico.isNotEmpty ? '\nTel. Médico: ${medicamento.telefoneMedico}' : ''}'
           '\n${medicamento.notificacaoFixa ? '🔒 Alerta Fixo (não sai até tickar)' : '🕶️ Modo Discreto / Date (pode dispensar)'}',
         ),
         isThreeLine: true,

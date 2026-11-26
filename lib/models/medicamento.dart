@@ -5,6 +5,8 @@ class Medicamento {
   final List<String> horarios;
   final String observacao;
   final bool notificacaoFixa;
+  final String medico;
+  final String telefoneMedico;
 
   const Medicamento({
     this.id,
@@ -13,6 +15,8 @@ class Medicamento {
     required this.horarios,
     this.observacao = '',
     this.notificacaoFixa = true,
+    this.medico = '',
+    this.telefoneMedico = '',
   });
 
   Map<String, dynamic> toMap() => {
@@ -22,6 +26,8 @@ class Medicamento {
         'horarios': horarios.join(','),
         'observacao': observacao,
         'notificacao_fixa': notificacaoFixa ? 1 : 0,
+        'medico': medico,
+        'telefone_medico': telefoneMedico,
       };
 
   factory Medicamento.fromMap(Map<String, dynamic> m) {
@@ -35,6 +41,8 @@ class Medicamento {
           : textoHorarios.split(',').map((e) => e.trim()).toList(),
       observacao: (m['observacao'] as String?) ?? '',
       notificacaoFixa: ((m['notificacao_fixa'] as int?) ?? 1) == 1,
+      medico: (m['medico'] as String?) ?? '',
+      telefoneMedico: (m['telefone_medico'] as String?) ?? '',
     );
   }
 }

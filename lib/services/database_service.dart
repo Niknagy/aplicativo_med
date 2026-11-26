@@ -44,7 +44,9 @@ class DatabaseService {
             dose TEXT NOT NULL,
             horarios TEXT NOT NULL,
             observacao TEXT,
-            notificacao_fixa INTEGER NOT NULL DEFAULT 1
+            notificacao_fixa INTEGER NOT NULL DEFAULT 1,
+            medico TEXT,
+            telefone_medico TEXT
           )''');
         await db.execute('''
           CREATE TABLE registros_dose (

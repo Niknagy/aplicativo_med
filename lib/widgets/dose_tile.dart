@@ -55,6 +55,8 @@ class DoseTile extends StatelessWidget {
         subtitle: Text(
           '${medicamento.dose}'
           '${medicamento.observacao.isNotEmpty ? '\n${medicamento.observacao}' : ''}'
+          '${medicamento.medico.isNotEmpty ? '\nMédico: ${medicamento.medico}' : ''}'
+          '${medicamento.telefoneMedico.isNotEmpty ? '\nTel. Médico: ${medicamento.telefoneMedico}' : ''}'
           '\n${tomado ? '✅ Tomado às ${horaMarcada ?? horario}' : (medicamento.notificacaoFixa ? '🔒 Notificação fixa ativa' : '🕶️ Modo Discreto (Date)')}',
           style: const TextStyle(fontSize: 14),
         ),

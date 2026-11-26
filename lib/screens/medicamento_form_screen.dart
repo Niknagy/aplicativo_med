@@ -18,6 +18,8 @@ class _MedicamentoFormScreenState extends State<MedicamentoFormScreen> {
   late final TextEditingController _nome;
   late final TextEditingController _dose;
   late final TextEditingController _obs;
+  late final TextEditingController _medico;
+  late final TextEditingController _telefoneMedico;
   late List<String> _horarios;
   late bool _notificacaoFixa;
   bool _erroHorario = false;
@@ -32,6 +34,8 @@ class _MedicamentoFormScreenState extends State<MedicamentoFormScreen> {
     _nome = TextEditingController(text: m?.nome ?? '');
     _dose = TextEditingController(text: m?.dose ?? '');
     _obs = TextEditingController(text: m?.observacao ?? '');
+    _medico = TextEditingController(text: m?.medico ?? '');
+    _telefoneMedico = TextEditingController(text: m?.telefoneMedico ?? '');
     _horarios = [...?m?.horarios];
     _notificacaoFixa = m?.notificacaoFixa ?? true;
   }
@@ -41,6 +45,8 @@ class _MedicamentoFormScreenState extends State<MedicamentoFormScreen> {
     _nome.dispose();
     _dose.dispose();
     _obs.dispose();
+    _medico.dispose();
+    _telefoneMedico.dispose();
     super.dispose();
   }
 
@@ -74,6 +80,8 @@ class _MedicamentoFormScreenState extends State<MedicamentoFormScreen> {
       horarios: _horarios,
       observacao: _obs.text.trim(),
       notificacaoFixa: _notificacaoFixa,
+      medico: _medico.text.trim(),
+      telefoneMedico: _telefoneMedico.text.trim(),
     );
     final db = DatabaseService.instance;
     final admin = AuthService.usuarioAtual;
@@ -128,6 +136,26 @@ class _MedicamentoFormScreenState extends State<MedicamentoFormScreen> {
                 decoration: const InputDecoration(
                     labelText: 'Observação (opcional)',
                     border: OutlineInputBorder()),
+              ),
+              const SizedBox(height: 16),
+              TextFormField(
+                controller: _medico,
+                decoration: const InputDecoration(
+                  labelText: 'Nome do médico',
+                  prefixIcon: Icon(Icons.person_outline),
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              const SizedBox(height: 16),
+              TextFormField(
+                controller: _telefoneMedico,
+                keyboardType: TextInputType.phone,
+                decoration: const InputDecoration(
+                  labelText: 'Telefone do médico',
+                  hintText: '(11) 99999-9999',
+                  prefixIcon: Icon(Icons.phone),
+                  border: OutlineInputBorder(),
+                ),
               ),
               const SizedBox(height: 20),
               Text('Horários do Despertador',
